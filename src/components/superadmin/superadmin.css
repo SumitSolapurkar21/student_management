@@ -1,0 +1,28 @@
+.studentcard {
+     background-color: rgb(255, 178, 35);
+     border: none;
+     outline: none;
+     cursor: pointer;
+}
+
+.studentcard:hover {
+     background-color: rgb(225, 146, 0);
+}
+
+.bi.bi-people {
+     font-size: 40px;
+     font-weight: 600;
+     color: white;
+}
+
+.cardcount>label,
+p {
+     font-weight: 600;
+     color: white;
+     font-size: 20px;
+}
+
+.student-section{
+     justify-content: space-between;
+}
+
