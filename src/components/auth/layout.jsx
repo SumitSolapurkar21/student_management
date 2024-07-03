@@ -11,7 +11,7 @@ const Layout = () => {
      const { showRegisterForm, showLoginForm } = useContext(UserContext)
      return (
           <div className="container">
-               <div className="row align-items-center">
+               <div className="row form-layout align-items-center">
                     <div className='col-12 col-md-7'>
                          <img src={smsimage} className='img-fluid bg-image' alt="Background" />
                     </div>

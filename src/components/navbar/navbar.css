@@ -4,5 +4,14 @@ i.bi{
 
 
 .btn-profile{
-     background-color: #712cf9;
+     background-color: #f9b82c;
+     border: none;
+ }
+
+ .bg-body-tertiary{
+     background-color: rgb(102 176 250) !important;
+ }
+
+ li a{
+     font-weight: 600;
  }

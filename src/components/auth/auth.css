@@ -26,3 +26,6 @@ img.bg-image{
      overflow-y: auto;
      height: 90vh;
 }
+.form-layout{
+     width: 100vw !important;
+}
