@@ -1,11 +1,12 @@
 import { useFormik } from 'formik';
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
-import "./auth.css"
+import "./auth.css";
 import UserContext from '../context/stateContext';
+import axios from 'axios';
+import { registerstudent } from '../../api';
 
 const Register = () => {
-
      const { setShowRegisterForm, setShowLoginForm } = useContext(UserContext);
      const [showModal, setShowModal] = useState(false);
 
@@ -13,16 +14,15 @@ const Register = () => {
           setShowRegisterForm(false);
           setShowLoginForm(true);
      }
+
      const validate = (values) => {
           const errors = {};
 
-          if (!values.firstname) errors.firstname = "First Name is Required";
-          if (!values.middlename) errors.middlename = "Middle Name is Required";
-          if (!values.lastname) errors.lastname = "Last Name is Required";
-          if (!values.address) errors.address = "Address is Required";
+          if (!values.fullname) errors.fullname = "Full Name is Required";
           if (!values.gender) errors.gender = "Gender is Required";
           if (!values.dateofbirth) errors.dateofbirth = "Date Of Birth is Required";
           if (!values.age) errors.age = "Age is Required";
+          if (!values.email) errors.email = "Email is Required";
           if (!values.mobilenumber) errors.mobilenumber = "Mobile Number is Required";
           if (!values.password) errors.password = "Password is Required";
 
@@ -31,44 +31,51 @@ const Register = () => {
 
      const formik = useFormik({
           initialValues: {
-               firstname: 'sumit',
-               middlename: 'girish',
-               lastname: 'solapurkar',
+               fullname: '',
                gender: '',
                dateofbirth: '',
                age: '',
-               email:'',
+               email: '',
                mobilenumber: '',
                password: '',
           },
           validate,
-          onSubmit: (values, { resetForm }) => {
-               console.log(values);
-               // resetForm();
-               setShowModal(true)
+          onSubmit: async (values, { resetForm }) => {
+               console.log("register form")
+               await axios.post(`${registerstudent}`, values)
+                    .then((response) => {
+                         console.log({ response });
+                         const { status, message } = response.data;
+                         setShowModal(true);
+                         resetForm();
+                    })
+                    .catch((error) => {
+                         console.error("There was an error registering the student!", error);
+                    });
           },
      });
 
      return (
           <>
-               {/* <!-- Modal --> */}
-               {showModal && <div className="modal" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div className="modal-dialog modal-dialog-centered">
-                         <div className="modal-content">
-                              <div className="modal-header">
-                                   <h1 className="modal-title fs-5" id="exampleModalLabel">Success</h1>
-                                   <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div className="modal-body">
-                                   Student Register Successfully
-                              </div>
-                              <div className="modal-footer">
-                                   <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                   <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={formHandler}>OK</button>
+               {showModal && (
+                    <div className="modal">
+                         <div className="modal-dialog modal-dialog-centered">
+                              <div className="modal-content">
+                                   <div className="modal-header">
+                                        <h1 className="modal-title fs-5" id="exampleModalLabel">Success</h1>
+                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                   </div>
+                                   <div className="modal-body">
+                                        Student Registered Successfully
+                                   </div>
+                                   <div className="modal-footer">
+                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={formHandler}>OK</button>
+                                   </div>
                               </div>
                          </div>
                     </div>
-               </div>}
+               )}
                <div className='section'>
                     <h4 htmlFor='heading' className='mb-3 fw-bold'>Student Registration</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
@@ -76,29 +83,20 @@ const Register = () => {
                               <input
                                    type="text"
                                    className="form-control"
-                                   id="studentname"
+                                   id="fullname"
                                    placeholder="Student Name"
-                                   name="studentname"
+                                   name="fullname"
                                    onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
-                                   value={formik.values.studentname}
+                                   value={formik.values.fullname}
                               />
-                              <label htmlFor="studentname">Student Name</label>
-                              {formik.touched.studentname && formik.errors.studentname ? (
-                                   <div className="text-danger">{formik.errors.studentname}</div>
+                              <label htmlFor="fullname">Student Name</label>
+                              {formik.touched.fullname && formik.errors.fullname ? (
+                                   <div className="text-danger">{formik.errors.fullname}</div>
                               ) : null}
                          </div>
                          <div className="form-floating mb-3">
-                              <textarea className="form-control" placeholder="Address.." id="address" onChange={formik.handleChange}
-                                   onBlur={formik.handleBlur}
-                                   value={formik.values.address}></textarea>
-                              <label htmlFor="address">Address</label>
-                              {formik.touched.address && formik.errors.address ? (
-                                   <div className="text-danger">{formik.errors.address}</div>
-                              ) : null}
-                         </div>
-                         <div className="form-floating mb-3">
-                              <select className="form-select" id="gender" aria-label="Floating label select" onChange={formik.handleChange}
+                              <select className="form-select" id="gender" aria-label="Floating label select" name="gender" onChange={formik.handleChange}
                                    onBlur={formik.handleBlur}
                                    value={formik.values.gender}>
                                    <option value=''>--Select--</option>
@@ -159,7 +157,6 @@ const Register = () => {
                                    <div className="text-danger">{formik.errors.email}</div>
                               ) : null}
                          </div>
-
                          <div className="form-floating mb-3">
                               <input
                                    type="number"
@@ -178,7 +175,7 @@ const Register = () => {
                          </div>
                          <div className="form-floating mb-3">
                               <input
-                                   type="text"
+                                   type="password"
                                    className="form-control"
                                    id="password"
                                    placeholder="Password"
@@ -192,15 +189,13 @@ const Register = () => {
                                    <div className="text-danger">{formik.errors.password}</div>
                               ) : null}
                          </div>
-
                          <div className="group-button text-center mt-5">
-                              <button type="submit" className="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">Submit</button>
+                              <button type="submit" className="btn btn-primary btn-sm">Register</button>
                               <button type='button' className="btn btn-secondary btn-sm mx-2" onClick={formHandler}>Login</button>
                          </div>
                     </form>
                </div>
           </>
-
      );
 };
 

@@ -1,10 +1,44 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../superadmin/layout'
 import { Link } from 'react-router-dom'
 import './student.css'
 import { useFormik } from 'formik'
+import axios from 'axios'
+import { getstudentprofile } from '../../api'
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 const Studentprofile = () => {
+
+     const [studentProfileData, setStudentProfileData] = useState([]);
+
+     const storedLoginData = localStorage.getItem('loginData');
+     const parsedLoginData = JSON.parse(storedLoginData);
+     const student_id = parsedLoginData[0]._id;
+
+     const GetstudentProfileData = async () => {
+          try {
+               await axios.post(`${getstudentprofile}`, { student_id: student_id }).then((response) => {
+                    const { status, message } = response.data;
+                    if (status === true) {
+                         setStudentProfileData(response.data.data)
+                    } else {
+                         Swal.fire({
+                              text: `${message}`,
+                              icon: "error"
+                         });
+                    }
+               })
+          } catch (error) {
+               Swal.fire({
+                    text: `${error}`,
+                    icon: "error"
+               });
+          }
+     }
+
+     useEffect(() => {
+          GetstudentProfileData();
+     }, [student_id])
 
      const validate = (values) => {
           const errors = {};
@@ -24,51 +58,49 @@ const Studentprofile = () => {
           initialValues: {
 
                // personal
-               firstname: 'sumit',
-               middlename: 'girish',
-               lastname: 'solapurkar',
-               gender: 'Male',
-               dateofbirth: '21-06-2000',
-               age: '24',
-               email: 'sumit@gmail.com',
-               material_status: 'Single',
-               mobilenumber: '9999999999',
-               nationality: 'Hindu',
-               caste: 'kshtriya',
-               sub_caste: 'jjhh',
-               branch: '',
-               year: '',
-               admission_category: 'Cap Round',
+               fullname: studentProfileData[0]?.admin_name,
+               gender: studentProfileData[0]?.gender,
+               dateofbirth: studentProfileData[0]?.dateofbirth,
+               age: studentProfileData[0]?.age,
+               email: studentProfileData[0]?.email,
+               clgname: studentProfileData[0]?.clgname,
+               username: studentProfileData[0]?.username,
+               password: studentProfileData[0]?.password,
+               // material_status: 'Single',
+               // nationality: 'Hindu',
+               // caste: 'kshtriya',
+               // sub_caste: 'jjhh',
+               // branch: '',
+               // year: '',
+               // admission_category: 'Cap Round',
+               // // family
+               // fathername: '',
+               // father_mobilenumber: '1010101010',
+               // father_occupation: 'business',
+               // father_income: '2000000',
 
+               // mothername: 'jshdk',
+               // mother_mobilenumber: '1010101010',
+               // mother_occupation: 'business',
+               // mother_income: '2000000',
 
-               // family
-               fathername: '',
-               father_mobilenumber: '1010101010',
-               father_occupation: 'business',
-               father_income: '2000000',
+               // // address
+               // country: '',
+               // state: '',
+               // city: '',
+               // pincode: '',
+               // plotno: '',
+               // street: '',
+               // declaration: '',
 
-               mothername: 'jshdk',
-               mother_mobilenumber: '1010101010',
-               mother_occupation: 'business',
-               mother_income: '2000000',
-
-               // address
-               country: '',
-               state: '',
-               city: '',
-               pincode: '',
-               plotno: '',
-               street: '',
-               declaration: '',
-
-               // documents
-               tenth_marksheet: '',
-               twelveth_marksheet: '',
-               twelveth_leaving_certificate: '',
-               caste_certificate: '',
-               nationality_certificate: '',
-               aadhar_card: '',
-               noncriminal_certificate: ''
+               // // documents
+               // tenth_marksheet: '',
+               // twelveth_marksheet: '',
+               // twelveth_leaving_certificate: '',
+               // caste_certificate: '',
+               // nationality_certificate: '',
+               // aadhar_card: '',
+               // noncriminal_certificate: ''
 
 
 
@@ -105,19 +137,19 @@ const Studentprofile = () => {
                                         <input
                                              type="text"
                                              className="form-control"
-                                             id="firstname"
+                                             id="fullname"
                                              placeholder="First Name"
-                                             name="firstname"
+                                             name="fullname"
                                              onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
-                                             value={formik.values.firstname}
+                                             value={formik.values.fullname}
                                         />
-                                        <label htmlFor="firstname">Student Name</label>
-                                        {formik.touched.firstname && formik.errors.firstname ? (
-                                             <div className="text-danger">{formik.errors.firstname}</div>
+                                        <label htmlFor="fullname">Student Name</label>
+                                        {formik.touched.fullname && formik.errors.fullname ? (
+                                             <div className="text-danger">{formik.errors.fullname}</div>
                                         ) : null}
                                    </div>
-                                   <div className="form-floating mb-3">
+                                   {/* <div className="form-floating mb-3">
                                         <input
                                              type="text"
                                              className="form-control"
@@ -148,7 +180,7 @@ const Studentprofile = () => {
                                         {formik.touched.lastname && formik.errors.lastname ? (
                                              <div className="text-danger">{formik.errors.lastname}</div>
                                         ) : null}
-                                   </div>
+                                   </div> */}
                                    <div className="form-floating mb-3">
                                         <select className="form-select" id="gender" aria-label="Floating label select" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
@@ -728,15 +760,15 @@ const Studentprofile = () => {
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.tenth_marksheet} id="tenth_marksheet" />
-                                        <label className="form-check-label" for="tenth_marksheet">
-                                            10th Marksheet 
+                                        <label className="form-check-label" htmlFor="tenth_marksheet">
+                                             10th Marksheet
                                         </label>
                                    </div>
                                    <div className="form-check">
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.twelveth_marksheet} id="twelveth_marksheet" />
-                                        <label className="form-check-label" for="twelveth_marksheet">
+                                        <label className="form-check-label" htmlFor="twelveth_marksheet">
                                              12th Marksheet
                                         </label>
                                    </div>
@@ -744,7 +776,7 @@ const Studentprofile = () => {
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.twelveth_leaving_certificate} id="twelveth_leaving_certificate" />
-                                        <label className="form-check-label" for="twelveth_leaving_certificate">
+                                        <label className="form-check-label" htmlFor="twelveth_leaving_certificate">
                                              12th Leaving Certificate
                                         </label>
                                    </div>
@@ -752,15 +784,15 @@ const Studentprofile = () => {
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.caste_certificate} id="caste_certificate" />
-                                        <label className="form-check-label" for="caste_certificate">
-                                            Caste Certificate
+                                        <label className="form-check-label" htmlFor="caste_certificate">
+                                             Caste Certificate
                                         </label>
                                    </div>
                                    <div className="form-check">
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.nationality_certificate} id="nationality_certificate" />
-                                        <label className="form-check-label" for="nationality_certificate">
+                                        <label className="form-check-label" htmlFor="nationality_certificate">
                                              Nationality Cetrificate
                                         </label>
                                    </div>
@@ -768,7 +800,7 @@ const Studentprofile = () => {
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.aadhar_card} id="aadhar_card" />
-                                        <label className="form-check-label" for="aadhar_card">
+                                        <label className="form-check-label" htmlFor="aadhar_card">
                                              AAdhar Card
                                         </label>
                                    </div>
@@ -776,8 +808,8 @@ const Studentprofile = () => {
                                         <input className="form-check-input" type="checkbox" onChange={formik.handleChange}
                                              onBlur={formik.handleBlur}
                                              value={formik.values.noncriminal_certificate} id="noncriminal_certificate" />
-                                        <label className="form-check-label" for="noncriminal_certificate">
-                                        Non-Criminal Certificate
+                                        <label className="form-check-label" htmlFor="noncriminal_certificate">
+                                             Non-Criminal Certificate
                                         </label>
                                    </div>
 

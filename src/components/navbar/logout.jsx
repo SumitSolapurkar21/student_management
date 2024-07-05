@@ -1,8 +1,26 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './navbar.css'
+import UserContext from '../context/stateContext';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 const Logout = () => {
+  const navigate = useNavigate();
+  const { setloginStudentData } = useContext(UserContext)
+  const storedLoginData = localStorage.getItem('loginData');
+  const parsedLoginData = storedLoginData ? JSON.parse(storedLoginData) : null;
+
+  const handleLogout = () => {
+    localStorage.removeItem('loginData');
+    setloginStudentData(null);
+    Swal.fire({
+      text: `Logout Successfully`,
+      icon: "success"
+    });
+    setTimeout(() => {
+      navigate('/');
+    }, 1000);
+  }
   return (
     <>
 
@@ -17,7 +35,7 @@ const Logout = () => {
         <ul className="dropdown-menu dropdown-menu-lg-end">
           <li>
             <Link to="/profile" className="dropdown-item" >
-              <i className="bi  bi-person-fill"></i> Superadmin
+              <i className="bi  bi-person-fill"></i> {parsedLoginData ? parsedLoginData[0]?.role : 'Guest'}
             </Link>
           </li>
           <li>
@@ -26,8 +44,8 @@ const Logout = () => {
             </Link>
           </li>
 
-          <li>
-            <Link to="/" className="dropdown-item" >
+          <li >
+            <Link className="dropdown-item" onClick={handleLogout}>
               <i className="bi bi-box-arrow-right"></i> Logout
             </Link>
           </li>
