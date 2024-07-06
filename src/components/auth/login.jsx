@@ -39,7 +39,6 @@ const Login = () => {
           onSubmit: async (values, { resetForm }) => {
                try {
                     const response = await axios.post(`${login}`, values);
-                    console.log({ response })
                     const { status, message, data } = response.data;
                     if (status === true) {
                           localStorage.setItem('loginData', JSON.stringify(data));

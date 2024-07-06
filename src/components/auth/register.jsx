@@ -5,10 +5,10 @@ import "./auth.css";
 import UserContext from '../context/stateContext';
 import axios from 'axios';
 import { registerstudent } from '../../api';
+import Swal from 'sweetalert2/dist/sweetalert2.js'
 
 const Register = () => {
      const { setShowRegisterForm, setShowLoginForm } = useContext(UserContext);
-     const [showModal, setShowModal] = useState(false);
 
      const formHandler = () => {
           setShowRegisterForm(false);
@@ -41,13 +41,21 @@ const Register = () => {
           },
           validate,
           onSubmit: async (values, { resetForm }) => {
-               console.log("register form")
                await axios.post(`${registerstudent}`, values)
                     .then((response) => {
-                         console.log({ response });
                          const { status, message } = response.data;
-                         setShowModal(true);
-                         resetForm();
+                         if (status === true) {
+                              Swal.fire({
+                                   text: `${message}`,
+                                   icon: "success"
+                              });
+                              resetForm();
+                         } else {
+                              Swal.fire({
+                                   text: `${message}`,
+                                   icon: "error"
+                              });
+                         }
                     })
                     .catch((error) => {
                          console.error("There was an error registering the student!", error);
@@ -57,25 +65,6 @@ const Register = () => {
 
      return (
           <>
-               {showModal && (
-                    <div className="modal">
-                         <div className="modal-dialog modal-dialog-centered">
-                              <div className="modal-content">
-                                   <div className="modal-header">
-                                        <h1 className="modal-title fs-5" id="exampleModalLabel">Success</h1>
-                                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                   </div>
-                                   <div className="modal-body">
-                                        Student Registered Successfully
-                                   </div>
-                                   <div className="modal-footer">
-                                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={formHandler}>OK</button>
-                                   </div>
-                              </div>
-                         </div>
-                    </div>
-               )}
                <div className='section'>
                     <h4 htmlFor='heading' className='mb-3 fw-bold'>Student Registration</h4>
                     <form noValidate onSubmit={formik.handleSubmit}>
@@ -127,7 +116,7 @@ const Register = () => {
                          </div>
                          <div className="form-floating mb-3">
                               <input
-                                   type="number"
+                                   type="text"
                                    className="form-control"
                                    id="age"
                                    placeholder="Age"
@@ -159,7 +148,7 @@ const Register = () => {
                          </div>
                          <div className="form-floating mb-3">
                               <input
-                                   type="number"
+                                   type="text"
                                    className="form-control"
                                    id="mobilenumber"
                                    placeholder="Mobile Number"

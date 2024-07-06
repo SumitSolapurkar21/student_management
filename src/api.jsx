@@ -9,3 +9,5 @@ export const registerstudent = `${baseurl}/studentregistration`;
 export const studentlist = `${baseurl}/GetStudentList`;
 export const givestudentaccess = `${baseurl}/GiveStudentAccess`;
 export const getstudentprofile = `${baseurl}/GetStudentProfile`;
+export const updatestudentprofile = `${baseurl}/UpdateStudentProfile`;
+export const getstudentcount = `${baseurl}/GetStudentCount`;

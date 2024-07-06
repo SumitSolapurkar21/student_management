@@ -117,7 +117,7 @@ const Studentregisteredlist = () => {
                                         <td>{student.dateofbirth}</td>
                                         <td>{student.age}</td>
                                         <td>{student.username}</td>
-                                        <td>{student.password}</td>
+                                        <td>{student.password ? '*****' : '*****'}</td>
                                         <td>
                                              <div className="form-check form-switch">
                                                   <input className="form-check-input" type="checkbox" role="switch" id={`flexSwitchCheckChecked${student._id}`}

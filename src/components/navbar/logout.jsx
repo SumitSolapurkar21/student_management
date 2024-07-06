@@ -35,7 +35,7 @@ const Logout = () => {
         <ul className="dropdown-menu dropdown-menu-lg-end">
           <li>
             <Link to="/profile" className="dropdown-item" >
-              <i className="bi  bi-person-fill"></i> {parsedLoginData ? parsedLoginData[0]?.role : 'Guest'}
+              <i className="bi bi-person-fill"></i> {parsedLoginData ? parsedLoginData[0]?.role : 'Guest'}
             </Link>
           </li>
           <li>

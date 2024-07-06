@@ -10,7 +10,7 @@ const RouteComponent = () => {
      return (
           <BrowserRouter>
                <Routes>
-                    <Route path="/" element={<Layout />} />
+                    <Route index="/" element={<Layout />} />
 
                     {/* role superadmin */}
                     <Route path="/superadmindashboard" element={<Dashboard />} />
