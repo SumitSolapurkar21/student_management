@@ -16,7 +16,18 @@ const Studentdashboard = () => {
                               </div>
                          </div>
                     </Link>
+                    <Link to='/studentnotes'>
+                         <div className="card studentcard">
+                              <div className="card-body d-flex align-items-center text-center">
+                                   <i className="bi bi-file-earmark-text" color='#ffffff'></i>
+                                   <div className='cardcount mx-3 mt2'>
+                                        <label htmlFor="label">Notes</label>
+                                   </div>
+                              </div>
+                         </div>
+                    </Link>
                </div>
+
           </Layout>
      )
 }

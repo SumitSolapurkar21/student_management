@@ -14,3 +14,12 @@ h5.profile-heading{
      justify-content: center !important;
 
  }
+
+ .bi.bi-file-earmark-text {
+     font-size: 40px;
+     font-weight: 600;
+     color: white;
+ }
+ .notes-data p{
+    color: black;
+ }

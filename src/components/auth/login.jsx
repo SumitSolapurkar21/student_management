@@ -57,7 +57,6 @@ const Login = () => {
                     }else{
                          Swal.fire({
                               title:`${message}`,
-                              text: `Do not have Access to Login`,
                               icon: "error"
                          });
                     }
